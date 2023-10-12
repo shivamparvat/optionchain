@@ -2,7 +2,7 @@ import React from "react";
 import "./header.css";
 import { convertTo12HourFormat } from "../../utils/util";
 
-function Header({ atm, time, optionData }) {
+function Header({ atm, time, optionData, logOut }) {
   const lastUpdate = new Date(time);
   return (
     <header className="header">
@@ -37,7 +37,15 @@ function Header({ atm, time, optionData }) {
             <span className="live text">Live</span>
           </div>
         </li>
-        <li>{/* <span className="newupdateText"> New Update</span> */}</li>
+        <li
+          onClick={() => {
+            logOut(false)
+            localStorage.removeItem("SHA1");
+          }}
+          style={{ cursor: "pointer" }}
+        >
+          Logout
+        </li>
       </ul>
     </header>
   );

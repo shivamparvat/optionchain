@@ -3,12 +3,14 @@ import "./App.css";
 import Chartlayout from "./components/charts/Chartlayout";
 import Header from "./components/header/Header";
 import Options from "./components/options/Options";
+import Login from "./components/Login";
 import { database } from "./utils/firebase";
 import { ref, onValue, query, limitToLast } from "firebase/database";
-import {calculateTime, calculateTimeForQurey} from "./utils/calculateTime";
+import { calculateTimeForQurey } from "./utils/calculateTime";
 
 function App() {
   const [data, setData] = useState([]);
+  const [loginBool, setLoginBool] = useState(false);
   const [optionData, setOptionData] = useState({
     live: true,
     strikes: 10,
@@ -36,35 +38,57 @@ function App() {
 
     const queryStr = optionData.live
       ? `option${year}${formattedMonth}${formattedDay}`
-      : `option${selectedDate.getUTCFullYear()}${selectedDatemonth}${selectedDateDay}/${calculateTimeForQurey(optionData.time[0])}`;
+      : `option${selectedDate.getUTCFullYear()}${selectedDatemonth}${selectedDateDay}/${calculateTimeForQurey(
+          optionData.time[0]
+        )}`;
 
+    function limit() {
+      return optionData.live ? limitToLast(1) : limitToLast(7);
+    }
 
-      function limit(){
-        return optionData.live?limitToLast(1):limitToLast(7)
-      }
-      console.log(queryStr)
-    const dbRef = query(ref(database, queryStr),limit());
+    const dbRef = query(ref(database, queryStr), limit());
     onValue(dbRef, async (snapshot) => {
       const resdata = snapshot.val();
       if (!!resdata) {
-        // console.log(optionData.live?resdata[Object.keys(resdata)]:resdata)
-        setData(optionData.live?resdata[Object.keys(resdata)]:resdata);
-        console.log(`Data update ${new Date().toLocaleDateString()}`);
+        setData(optionData.live ? resdata[Object.keys(resdata)] : resdata);
       } else {
         setData({});
-        console.log("Data not found");
       }
     });
     return () => {};
   }, [optionData.live, optionData]);
+
+  function LoginSubmit(email, password) {
+    if (
+      email === "skulltrader91@gmail.com" &&
+      password === "Skulltrader91@pass"
+    ) {
+      setLoginBool(true)
+      localStorage.setItem("SHA1", "b12fd53694622f4b4a272264d682f4ff16f1e3bf");
+    }
+  }
+
+  useEffect(() => {
+    const data = localStorage.getItem("SHA1")
+    if(data && data === "b12fd53694622f4b4a272264d682f4ff16f1e3bf"){
+      
+      setLoginBool(true)
+    }else{
+      setLoginBool(false)
+    }
+  }, [])
+  
   return (
     <div className="App">
-      <Header {...data} optionData={optionData} />
-      <Options setData={setOptionData} optionData={optionData} />
-      <Chartlayout
-        data={data}
-        strikes={optionData.strikes}
-      />
+      {!loginBool ? (
+        <Login LoginSubmit={LoginSubmit} />
+      ) : (
+        <>
+          <Header {...data} optionData={optionData} logOut={setLoginBool}/>
+          <Options setData={setOptionData} optionData={optionData} />
+          <Chartlayout data={data} strikes={optionData.strikes} />
+        </>
+      )}
     </div>
   );
 }
