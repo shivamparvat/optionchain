@@ -1,0 +1,17 @@
+.FirstChart {
+  margin: 20px 200px;
+  height: 70vh;
+}
+
+@media (max-width: 1024px) {
+  .FirstChart {
+    margin: 20px 20px;
+    height: 80vh;
+  }
+}
+@media (max-width: 715px) {
+  .FirstChart {
+    margin: 10px 0;
+    height: 90vh;
+  }
+}

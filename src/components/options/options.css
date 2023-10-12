@@ -1,0 +1,120 @@
+.options {
+  display: flex;
+  justify-content: space-around;
+  padding: 20px;
+  margin: 20px 100px;
+  border-radius: 5px;
+  box-shadow: 2px 2px 4px #ccc, -2px -2px 4px #ccc;
+}
+
+/* timeBar */
+.timeRange {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  column-gap: 20px;
+}
+
+/* live toggle */
+
+.live.container input {
+  position: absolute;
+  opacity: 0;
+  cursor: pointer;
+  height: 0;
+  width: 0;
+}
+
+.live.container {
+  display: flex;
+  column-gap: 20px;
+  position: relative;
+  cursor: pointer;
+  font-size: 20px;
+  user-select: none;
+}
+
+.checkmark {
+  position: relative;
+  top: 0;
+  left: 0;
+  height: 1.3em;
+  width: 1.3em;
+  background: var(--dark);
+  border-radius: 50px;
+  transition: all 0.7s;
+  --spread: 10px;
+}
+
+.live.container input:checked ~ .checkmark {
+  background: var(--dark);
+  box-shadow: -1px -1px var(--spread) 0px #fd1d1d,
+    0 -1px var(--spread) 0px #fd1d1d, 1px -1px var(--spread) 0px #fd1d1d,
+    1px 0 var(--spread) 0px #fd1d1d, 1px 1px var(--spread) 0px #fd1d1d,
+    0 1px var(--spread) 0px #fd1d1d, -1px 1px var(--spread) 0px #fd1d1d;
+}
+
+.checkmark:after {
+  content: "";
+  position: absolute;
+  display: none;
+}
+
+.live.container input:checked ~ .checkmark:after {
+  display: block;
+}
+
+.live.container .checkmark:after {
+  left: 0.45em;
+  top: 0.25em;
+  width: 0.25em;
+  height: 0.5em;
+  border: solid #f0f0f0;
+  border-width: 0 0.15em 0.15em 0;
+  transform: rotate(45deg);
+}
+
+/* date */
+
+[type="date"] {
+  background: #fff
+    url(https://cdn1.iconfinder.com/data/icons/cc_mono_icon_set/blacks/16x16/calendar_2.png)
+    97% 50% no-repeat;
+  padding: 5px 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+}
+[type="date"]::-webkit-inner-spin-button {
+  display: none;
+}
+[type="date"]::-webkit-calendar-picker-indicator {
+  opacity: 0;
+}
+
+.stikeInput{
+  width: 50px;
+}
+
+@media (max-width: 1250px) {
+  .timeRange .range {
+    width: 200px !important;
+  }
+  .options {
+    margin: 20px 50px;
+  }
+}
+@media (max-width: 715px) {
+  .timeRange .range {
+    width: 200px !important;
+  }
+  .options {
+    margin: 20px 20px;
+  }
+  .options .live.text,
+  .options .date.text {
+    display: none;
+  }
+  .live.container{
+    column-gap: 0px;
+  }
+}
